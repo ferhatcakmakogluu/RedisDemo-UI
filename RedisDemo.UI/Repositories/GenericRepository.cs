@@ -1,26 +1,38 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
+using RedisDemo.UI.DbContextFile;
+
 namespace RedisDemo.UI.Repositories
 {
     public class GenericRepository<T> : IRepository<T> where T : class
     {
-        public Task<T> Create(T entity)
+        private readonly AppDbContext _appDbContext;
+        private readonly DbSet<T> _dbSet;
+
+        public GenericRepository(AppDbContext appDbContext)
         {
-            throw new NotImplementedException();
+            _appDbContext = appDbContext;
+            _dbSet = _appDbContext.Set<T>();
         }
 
-        public Task<List<T>> GetAllAsync()
+        public async void Create(T entity)
         {
-            throw new NotImplementedException();
+            await _dbSet.AddAsync(entity);
         }
 
-        public Task<T> GetByIdAsync(int id)
+        public  IQueryable<T> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return _dbSet.AsNoTracking().AsQueryable();
         }
 
-        public Task<T> Remove(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _dbSet.FindAsync(id);
+        }
+
+        public void Remove(T entity)
+        {
+            _dbSet.Remove(entity);
         }
     }
 }

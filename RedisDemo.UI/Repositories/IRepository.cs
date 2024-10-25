@@ -2,9 +2,9 @@
 {
     public interface IRepository<T> where T : class
     {
-        Task<List<T>> GetAllAsync();
+        IQueryable<T> GetAllAsync();
         Task<T> GetByIdAsync(int id);
-        Task<T> Create(T entity);
-        Task<T> Remove(int id);
+        void Create(T entity);
+        void Remove(T entity);
     }
 }
