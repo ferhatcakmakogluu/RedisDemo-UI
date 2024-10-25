@@ -1,26 +1,44 @@
 ﻿
+using RedisDemo.UI.DbContextFile;
+using RedisDemo.UI.Repositories;
+
 namespace RedisDemo.UI.Services
 {
     public class GenericService<T> : IService<T> where T : class
     {
-        public Task<T> Create(T entity)
+        private readonly IRepository<T> _repository;
+        private readonly AppDbContext _appDbContext;
+
+        public GenericService(IRepository<T> repository, AppDbContext appDbContext)
         {
-            throw new NotImplementedException();
+            _repository = repository;
+            _appDbContext = appDbContext;
         }
 
-        public Task<List<T>> GetAllAsync()
+        public async Task<T> Create(T entity)
         {
-            throw new NotImplementedException();
+            _repository.Create(entity);
+            await _appDbContext.SaveChangesAsync();
+            return entity;
         }
 
-        public Task<T> GetByIdAsync(int id)
+        public async Task<List<T>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var data = _repository.GetAllAsync().ToList();
+            return data;
         }
 
-        public Task<T> Remove(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var data = await _repository.GetByIdAsync(id);
+            return data;
+        }
+
+        public async Task<T> Remove(T entity)
+        {
+            _repository.Remove(entity);
+            await _appDbContext.SaveChangesAsync();
+            return entity;
         }
     }
 }
