@@ -4,7 +4,7 @@ using RedisDemo.UI.Repositories;
 
 namespace RedisDemo.UI.Services
 {
-    public class StudentsService : GenericService<Students>
+    public class StudentsService : GenericService<Students>, IStudentService
     {
         public StudentsService(IRepository<Students> repository, AppDbContext appDbContext) : base(repository, appDbContext)
         {

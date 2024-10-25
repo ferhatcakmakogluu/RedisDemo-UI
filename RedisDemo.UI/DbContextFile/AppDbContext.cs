@@ -13,9 +13,17 @@ namespace RedisDemo.UI.DbContextFile
         public DbSet<Students> Students { get; set; }
         public DbSet<Lessons> Lessons { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnConfiguring(optionsBuilder);
+            modelBuilder.Entity<Students>().HasData(
+                new Students { Id =1, Name="Ferhat", Surname="Cakmakoglu", SchoolNo="BM1000", BirthDate=DateTime.Now}    
+            );
+
+            modelBuilder.Entity<Lessons>().HasData(
+                new Lessons { Id=1,Name="Computer Science", Description="Data stracture", CourseCredit=7}
+            );
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
